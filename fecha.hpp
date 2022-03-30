@@ -3,7 +3,7 @@ class Fecha{
 		//Fecha();
 		Fecha(const Fecha&f);
 		explicit Fecha(const int d=0, const int m=0,const int y=0);
-		Fecha(char const*f);
+		Fecha(const char *f);
 		Fecha& operator=(const Fecha&f);
 		Fecha& operator+=(int);
 		Fecha& operator-=(int);
@@ -11,21 +11,17 @@ class Fecha{
 		Fecha operator++(int);
 		Fecha& operator--();
 		Fecha operator--(int);
-		Fecha operator+(int);
-		Fecha operator-(int);
-		bool operator<(const Fecha&);
-		bool operator==(const Fecha&);
-		bool operator>(Fecha&);
-		bool operator!=(const Fecha&);
-		bool operator<=(const Fecha&);
-		bool operator>=(Fecha&);
-		char* cadena();
+		Fecha operator+(int)const;
+		Fecha operator-(int)const;
+		friend bool operator<(const Fecha&,const Fecha&);
+		friend bool operator==(const Fecha&,const Fecha&);
+		char* cadena()const;
 		void mostrar();
 		//prueba
 		int aux();
-		int diia()const;
-		int mees()const;
-		int annno()const;
+		int dia()const;
+		int mes()const;
+		int anno()const;
 		//~Fecha();
 		class Invalida{
 			public:
@@ -34,6 +30,8 @@ class Fecha{
 			private:
 				const char* razon_;
 		};
+		const static int AnnoMinimo{1902};
+		const static int AnnoMaximo{2037};
 	private:
 		int dia_,mes_,anno_;
 		void validar();
@@ -41,3 +39,9 @@ class Fecha{
 };
 std::ostream& operator<<(std::ostream&on,const Fecha&fech);
 std::istream& operator>>(std::istream&in, Fecha&fech);
+bool operator<(const Fecha&,const Fecha&);
+bool operator==(const Fecha&,const Fecha&);
+bool operator>(const Fecha&,const Fecha&);
+bool operator!=(const Fecha&,const Fecha&);
+bool operator<=(const Fecha&,const Fecha&);
+bool operator>=(const Fecha&,const Fecha&);

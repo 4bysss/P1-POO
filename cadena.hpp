@@ -13,14 +13,8 @@ class Cadena{
 		const char* c_str() const;
 		Cadena& operator += (const Cadena&);
 		Cadena operator + (const Cadena&);
-		bool operator == (Cadena&);
-		bool operator != (Cadena&);
-		bool operator !=(const char*) const;
-		bool operator ==(const char*) const;
-		bool operator < (Cadena&);
-		bool operator > (Cadena&);
-		bool operator <= (Cadena&);
-		bool operator >= (Cadena&);
+		friend bool operator == (const Cadena&,const Cadena&);
+		friend bool operator < (const Cadena&, const Cadena&);
 		char& operator[](unsigned int);
 		char at(unsigned int);
 		Cadena substr(unsigned int ,unsigned int );
@@ -45,5 +39,9 @@ class Cadena{
 };
 std::istream& operator>>(std::istream& in, Cadena&cad);
 std::ostream& operator<<(std::ostream& in, Cadena&cad);
-bool operator == (const char*, Cadena&);
-bool operator != (const char*, Cadena&);
+bool operator == (const Cadena&,const Cadena&);
+bool operator != (const Cadena&,const Cadena&);
+bool operator < (const Cadena&, const Cadena&);
+bool operator > (const Cadena&, const Cadena&);
+bool operator <= (const Cadena&,const Cadena&);
+bool operator >= (const Cadena&,const Cadena&);

@@ -5,8 +5,8 @@
 #include <string>
 #include<locale>
 #include"fecha.hpp"
-#define anno__min 1902
-#define anno__max 2037
+#define annoMinimo 1902
+#define annoMax 2037
 time_t t=time(nullptr);
 tm* dt=localtime(&t);
 struct tm* conv=localtime(&t);
@@ -15,9 +15,9 @@ char Fechaletra[81];
 //Operadores de entrada salida
 std::ostream& operator<<(std::ostream&on,const Fecha&fech){
 	setlocale(LC_ALL, "spanish");
-	conv->tm_year= fech.annno()- 1900;
-	conv->tm_mon=fech.mees()-1;
-	conv->tm_mday=fech.diia();
+	conv->tm_year= fech.anno()- 1900;
+	conv->tm_mon=fech.mes()-1;
+	conv->tm_mday=fech.dia();
 	mktime(conv);
 	std::strftime (Fechaletra,80,"%A %d de %B de %Y" ,conv);
 	std::cout<<Fechaletra;
@@ -95,9 +95,9 @@ Fecha::Fecha(const Fecha&f){
 }
 
 //Metodos observadores
-int Fecha::diia()const{return dia_;}
-int Fecha::mees()const{return mes_;}
-int Fecha::annno()const{return anno_;}
+int Fecha::dia()const{return dia_;}
+int Fecha::mes()const{return mes_;}
+int Fecha::anno()const{return anno_;}
 //Funcion que muestra la Fecha de un objeto (a efectos de testeo);
 void Fecha::mostrar(){
 	std::cout<<dia_<<"-"<<mes_<<"-"<<anno_<<std::endl;
@@ -127,7 +127,7 @@ Fecha& Fecha::operator=(const Fecha&f){
 
 
 //Operador de conversion
-char* Fecha::cadena(){
+char* Fecha::cadena()const{
 	setlocale(LC_ALL, "spanish");
 	conv->tm_year= anno_ - 1900;
 	conv->tm_mon=mes_-1;
@@ -184,7 +184,7 @@ Fecha& Fecha::operator-=(int n){
 
 
 //Operato +;
-Fecha Fecha::operator+(int n){
+Fecha Fecha::operator+(int n)const{
 	Fecha aux;
 	aux=*this;
 	aux+=n;
@@ -194,7 +194,7 @@ Fecha Fecha::operator+(int n){
 
 
 //Operator -
-Fecha Fecha::operator-(int n){
+Fecha Fecha::operator-(int n)const{
 	Fecha aux;
 	aux=*this;
 	aux+=-n;
@@ -220,22 +220,22 @@ Fecha& Fecha::operator+=(int n){
 
 
 //Operador ==
-bool Fecha::operator==(const Fecha&f){
-	return(f.dia_==dia_&&f.mes_==mes_&&f.anno_==anno_);
+bool operator==(const Fecha&f1,const Fecha&f){
+	return(f.dia_==f1.dia_&&f.mes_==f1.mes_&&f.anno_==f1.anno_);
 }
 
 
 
-bool Fecha::operator<(const Fecha&f){
-	if(anno_<f.anno_){
+bool operator<(const Fecha&f1,const Fecha&f){
+	if(f1.anno_<f.anno_){
 		return true;
 	}
-	else if(anno_==f.anno_){
-		if(mes_<f.mes_){
+	else if(f1.anno_==f.anno_){
+		if(f1.mes_<f.mes_){
 			return true;
 		}
-		else if(mes_==f.mes_){
-			if(dia_<f.dia_){
+		else if(f1.mes_==f.mes_){
+			if(f1.dia_<f.dia_){
 				return true;
 			}
 		}
@@ -246,28 +246,28 @@ bool Fecha::operator<(const Fecha&f){
 
 
 //Operador !=
-bool Fecha::operator!=(const Fecha&f){
-	return(!(*this==f));
+bool operator!=(const Fecha&f1,const Fecha&f){
+	return(!(f1==f));
 }
 
 
 
 //Operator >
-bool Fecha::operator >(Fecha&f){
-	return (f<*this);
+bool operator >(const Fecha& f1,const Fecha&f){
+	return (f<f1);
 }
 
 
 
 //Operator <=
-bool Fecha::operator <=(const Fecha&f){
-	return (!(*this<f));
+bool operator <=(const Fecha&f1,const Fecha&f){
+	return (!(f<f1));
 }
 
 
 
 //Operator >=
-bool Fecha::operator >=(Fecha&f){
-	return (!(f<*this));
+bool operator >=(const Fecha&f1,const Fecha&f){
+	return (!(f1<f));
 }
 

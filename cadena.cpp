@@ -97,53 +97,40 @@ Cadena& Cadena::operator=(Cadena&c){
 
 
 //Sobrecarga del operador ==
-bool Cadena::operator==(Cadena&c){
-	return(strcmp(s_,c.s_)==0);
+bool operator==(const Cadena&c1,const Cadena&c){
+	return(strcmp(c1.s_,c.s_)==0);
 }
 
-bool operator== (const char*cad1,Cadena&C){
-	return(strcmp(cad1,C.c_str())==0);
-}
-bool operator !=(const char*cad1,Cadena&C){
-	return(!(cad1==C));
-}
 
 //Sobrecarga del operador !=
-bool Cadena::operator!=(Cadena&c){
-	return(!(*this==c));
+bool operator!=(const Cadena&c1,const Cadena&c){
+	return(!(c1==c));
 }
-bool Cadena::operator==(const char*cad1)const{
-	return(strcmp(cad1,s_)==0);
-}
-bool Cadena::operator!=(const char*cad1)const{
-	return !(*this==cad1);
-}
-
 
 
 //Sobrecarga del operador <
-bool Cadena::operator <(Cadena&c){
-	return((strcmp(s_,c.s_)>0));
+bool operator <(const Cadena&c1,const Cadena&c){
+	return((strcmp(c1.s_,c.s_)>0));
 }
 
 
 
 //Sobrecarga del operador >
-bool Cadena::operator >(Cadena&c){
-	return(c<*this);
+bool operator >(const Cadena&c1,const Cadena&c){
+	return(c<c1);
 }
 
 
 
 //Sobrecarga del operador <=
-bool Cadena::operator <=(Cadena&c){
-	return((*this==c)||(*this<c));
+bool operator <=(const Cadena&c1,const Cadena&c){
+	return((c1==c)||(c1<c));
 }
 
 
 //Sobrecarga del operador >=
-bool Cadena::operator >=(Cadena&c){
-	return(!(*this<c));
+bool operator >=(const Cadena&c1,const Cadena&c){
+	return(!(c1<c));
 }
 
 

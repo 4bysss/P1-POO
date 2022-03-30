@@ -1,21 +1,25 @@
-OBJETOS = fecha.o cadena.o test-fechacadena-consola.o
-
 CXX = g++
-
-CPPLAGS = c++ -DP1 -I../Tests-auto -I.
-CXXFLAGS = -std=c++1 -Wall -pedantic -g
+ 
+CPPFLAGS = -std=c++11 -g -DP1 -I../Tests-auto -I.
 VPATH = ../Tests-auto:.
 
-all:test_F
+all: test-P1-auto test-fechacadena-consola
 
-test_F:test-fechacadena-consola.o fecha.o cadena.o
-	${CXX} -o Final ${OBJETOS}
-fecha.o:fecha.cpp fecha.hpp
-	${CXX} -c fecha.cpp
-cadena.o:cadena.cpp cadena.hpp
-	${CXX} -c cadena.cpp
-test-fechacadena-consola.o:test-fechacadena-consola.cpp
-	${CXX} -DP1 -c test-fechacadena-consola.cpp
+test-fechacadena-consola: test-fechacadena-consola.cpp fecha.cpp cadena.cpp
+	$(CXX) $(CPPFLAGS) -c test-fechacadena-consola.cpp
+
+test-P1-auto: test-caso0-fecha-auto.o test-caso0-cadena-auto.o test-auto.o cadena.o fecha.o
+	$(CXX) -o $@ $^
+
+ test-caso0-fecha-auto.o test-caso0-cadena-auto.o test-auto.o: \
+      test-auto.hpp fecha.hpp cadena.hpp
+
+
+fecha.o: fecha.cpp fecha.hpp
+	$(CXX) $(CPPFLAGS) -c fecha.cpp
+
+cadena.o: cadena.cpp cadena.hpp
+	$(CXX) $(CPPFLAGS) -c cadena.cpp
+
 clean:
-	del *.o *.exe
-
+	rm all
