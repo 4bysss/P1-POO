@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <iterator>
 #include <iostream>//Temporal y solo para testeo
+#include <iomanip>
 #include "cadena.hpp"
 
 
@@ -10,8 +11,9 @@
 //Operadores de entrada/salida
 std::istream& operator>>(std::istream& in, Cadena&cad){
 	char fina[33];
-	int i,j;
-	in>>fina;
+	fina[0]='\0';
+	in>>std::setw(sizeof fina)>>fina;
+
 //	fflush(stdin);
 	Cadena aux(fina);
 	cad=aux;
@@ -20,8 +22,8 @@ std::istream& operator>>(std::istream& in, Cadena&cad){
 
 
 
-std::ostream& operator<<(std::ostream&on, Cadena&cad){
-	std::cout<<cad.c_str();
+std::ostream& operator<<(std::ostream&on,const Cadena&cad){
+	on<<cad.c_str();
 	return on;
 }
 
@@ -32,12 +34,13 @@ Cadena::Cadena(const char*cad){
 	tam_=strlen(cad);
 	s_=new char[tam_+1];
 	strcpy(s_,cad);
+
 }
 
 
 
 //Constructor predeterminado
-Cadena::Cadena(unsigned n,char s){
+Cadena::Cadena(unsigned int n,const char s){
 	s_=new char[n+1];
 	for(int i=0; i<n;i++){
 		s_[i]=s;
@@ -66,26 +69,21 @@ unsigned int Cadena::length()const{
 
 //Sobrecarga del operador =
 Cadena& Cadena::operator=(Cadena&&c){
-	
 	if(this!=&c){
-		if(tam_!=0){
-			delete[] s_;
-		}
-		s_=c.s_;
-		tam_=c.tam_;
-		c.s_=nullptr;
-		c.tam_=0;
+		delete[] s_;
+		s_=std::move(c.s_);
+		tam_=std::move(c.tam_);
 	}
+	c.s_=nullptr;
+	c.tam_=0;
 	return *this;
 }
-
-Cadena::Cadena(Cadena&& c){
-	s_=c.s_;
-	tam_=c.tam_;
+//constructor por movimiento
+Cadena::Cadena(Cadena && c):s_(std::move(c.s_)),tam_(std::move(c.tam_)){
 	c.tam_=0;
-	c=nullptr;
+	c.s_=nullptr;
 }
-Cadena& Cadena::operator=(Cadena&c){
+Cadena& Cadena::operator=(const Cadena&c){
 	if(this!=&c){
 		this->tam_=c.tam_;
 		this->s_=new char[c.tam_+1];
@@ -110,7 +108,7 @@ bool operator!=(const Cadena&c1,const Cadena&c){
 
 //Sobrecarga del operador <
 bool operator <(const Cadena&c1,const Cadena&c){
-	return((strcmp(c1.s_,c.s_)>0));
+	return((strcmp(c1.s_,c.s_)<0));
 }
 
 
@@ -146,11 +144,28 @@ const char *Cadena::c_str()const{
 char& Cadena::operator[](unsigned int i){
 	return(this->s_[i]);
 }
+char Cadena::operator[](unsigned int i)const{
+	return(this->s_[i]);
+}
 
 
 
 //Metodo at()
-char Cadena::at(unsigned int i){
+char Cadena::at(int i)const{
+	if(i<0){
+		throw(std::out_of_range("Fuera de los limites de la cadena"));
+	}
+	if(i>this->tam_-1){
+		throw(std::out_of_range("Fuera de los limites de la cadena"));
+	}
+	else{
+		return(this->s_[i]);
+	}
+}
+char& Cadena::at(int i){
+	if(i<0){
+		throw(std::out_of_range("Fuera de los limites de la cadena"));
+	}
 	if(i>this->tam_-1){
 		throw(std::out_of_range("Fuera de los limites de la cadena"));
 	}
@@ -181,8 +196,8 @@ Cadena& Cadena::operator +=(const Cadena&c){
 
 
 //Sobrecarga del operador +;
-Cadena Cadena::operator +(const Cadena&c){
-	Cadena s(*this);
+Cadena operator +(const Cadena&c1,const Cadena&c){
+	Cadena s(c1);
 	s+=c;
 	return s;
 }
@@ -190,7 +205,10 @@ Cadena Cadena::operator +(const Cadena&c){
 
 
 //Metodo subst
-Cadena Cadena::substr(unsigned int in, unsigned int tam){
+Cadena Cadena::substr(int in, int tam)const{
+	if(in<0||tam<0){
+		throw std::out_of_range("Sobrepasado rango de la cadena");
+	}
 	if(in+tam>tam_-1){
 		throw std::out_of_range("Sobrepasado rango de la cadena");
 	}

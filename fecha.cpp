@@ -14,13 +14,13 @@ char Fechaletra[81];
 
 //Operadores de entrada salida
 std::ostream& operator<<(std::ostream&on,const Fecha&fech){
-	setlocale(LC_ALL, "spanish");
+	setlocale(LC_ALL, "es_ES.UTF-8");
 	conv->tm_year= fech.anno()- 1900;
 	conv->tm_mon=fech.mes()-1;
 	conv->tm_mday=fech.dia();
 	mktime(conv);
 	std::strftime (Fechaletra,80,"%A %d de %B de %Y" ,conv);
-	std::cout<<Fechaletra;
+	on<<Fechaletra;
 	return on;
 }
 
@@ -28,9 +28,27 @@ std::ostream& operator<<(std::ostream&on,const Fecha&fech){
 
 std::istream& operator>>(std::istream&in,Fecha&fech){
 	char fechizador[80];
-	std::cin>>fechizador;
-	Fecha aux(fechizador);
-	fech = aux;
+	std:in>>fechizador;
+	int di,me,an;
+	di=me=an=0;
+	if(strlen(fechizador)>10){
+		in.setstate(std::ios::failbit);
+		throw Fecha::Invalida("Formato mal");
+	}
+	if(std::sscanf (fechizador,"%d/%d/%d",&di,&me,&an)!=3){
+		in.setstate(std::ios::failbit);
+		throw Fecha::Invalida("Formato mal");
+	}
+	else{	
+		try{
+			Fecha aux(fechizador);
+		}catch(Fecha::Invalida e){
+			in.setstate(std::ios::failbit);
+			throw Fecha::Invalida("Formato mal");
+		}
+		fech = fechizador;
+		fech.validar();
+	}
 	return in;
 }
 
@@ -41,6 +59,9 @@ void Fecha::validar(){
 	if(anno_<1902 || anno_>2037){
 		throw Fecha::Invalida("Anno invalido");
 	}
+	if (mes_>12||mes_<1){
+		throw Fecha::Invalida("Mes invalido, maximo 12");
+	}
 	else if(mes_==2){
 		if((anno_%4==0) &&(anno_%400==0 || anno_%100!=0)){
 			if(dia_>29){
@@ -50,9 +71,6 @@ void Fecha::validar(){
 		else if (dia_>28){
 			throw Fecha::Invalida("Dia no valido de febrero");
 		}
-	}
-	else if (mes_>12){
-		throw Fecha::Invalida("Mes invalido, maximo 12");
 	}
 	else if(mes_==2&&dia_>28){
 		throw Fecha::Invalida("Dia no valido de febrero");
@@ -87,12 +105,12 @@ Fecha::Fecha(const int d, const int m, const int y){
 
 
 //Constructorr por copia
-Fecha::Fecha(const Fecha&f){
+/*Fecha::Fecha(const Fecha&f){
 	dia_=f.dia_;
 	mes_=f.mes_;
 	anno_=f.anno_;
 	validar();
-}
+}*/
 
 //Metodos observadores
 int Fecha::dia()const{return dia_;}
@@ -109,20 +127,30 @@ void Fecha::mostrar(){
 Fecha::Fecha(const char *f){
 	int n=std::sscanf(f,"%d/%d/%d",&dia_,&mes_,&anno_);
 	
-	if(n==EOF){
-		std::cout<<"ERROR";
+	if(n!=3){
+		throw Fecha::Invalida("Formato invalido");
+	}else{
+	if(dia_==0){
+		dia_=dt->tm_mday;
 	}
-	validar();
+	if(mes_==0){
+		mes_=dt->tm_mon+1;
+	}
+	if(anno_==0){
+		anno_=dt->tm_year+1900;
+	}
+
+	validar();}
 	
 }
 
 
-Fecha& Fecha::operator=(const Fecha&f){
+/*Fecha& Fecha::operator=(const Fecha&f){
 	dia_=f.dia_;
 	mes_=f.mes_;
 	anno_=f.anno_;
 	return *this;
-}
+}*/
 
 
 

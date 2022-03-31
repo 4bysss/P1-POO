@@ -1,10 +1,11 @@
 class Fecha{
 	public:
 		//Fecha();
-		Fecha(const Fecha&f);
+//		Fecha(const Fecha&f);
+		void validar();
 		explicit Fecha(const int d=0, const int m=0,const int y=0);
 		Fecha(const char *f);
-		Fecha& operator=(const Fecha&f);
+//		Fecha& operator=(const Fecha&f);
 		Fecha& operator+=(int);
 		Fecha& operator-=(int);
 		Fecha& operator++();
@@ -34,7 +35,6 @@ class Fecha{
 		const static int AnnoMaximo{2037};
 	private:
 		int dia_,mes_,anno_;
-		void validar();
 
 };
 std::ostream& operator<<(std::ostream&on,const Fecha&fech);
