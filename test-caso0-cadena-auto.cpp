@@ -64,7 +64,7 @@ FCTMF_SUITE_BGN(test_cadena) {
   FCT_TEST_BGN(Cadena - Ctor: de movimiento) {
     Cadena a(3);
     const char* c = a.c_str();
-    const Cadena b = move(a);
+    const Cadena b = move(a);  
     fct_chk(is_move_constructible<Cadena>::value);
     fct_chk_eq_str(b.c_str(), c);
     fct_chk_eq_str(b.c_str(), "   ");
@@ -85,6 +85,8 @@ FCTMF_SUITE_BGN(test_cadena) {
     fct_chk(is_copy_assignable<Cadena>::value);
     Cadena a("hola"), b("au revoire");
     a = b;
+   // std::cout<<a.c_str();
+   // std::cout<<b.c_str();
     fct_chk_eq_str(a.c_str(), b.c_str());
     fct_chk_eq_int(a.length(), b.length());
     b[0] = 'A'; b += "!";
