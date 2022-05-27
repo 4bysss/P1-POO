@@ -1,3 +1,5 @@
+#ifndef _fecha_
+#define _fecha_
 class Fecha{
 	public:
 		//Fecha();
@@ -45,3 +47,4 @@ bool operator>(const Fecha&,const Fecha&);
 bool operator!=(const Fecha&,const Fecha&);
 bool operator<=(const Fecha&,const Fecha&);
 bool operator>=(const Fecha&,const Fecha&);
+#endif

@@ -89,14 +89,16 @@ Fecha::Fecha(const int d, const int m, const int y){
 	dia_=d;
 	mes_=m;
 	anno_=y;
+	time_t tt=time(nullptr);
+	tm* dtt=localtime(&tt);
 	if(dia_==0){
-		dia_=dt->tm_mday;
+		dia_=dtt->tm_mday;
 	}
 	if(mes_==0){
-		mes_=dt->tm_mon+1;
+		mes_=dtt->tm_mon+1;
 	}
 	if(anno_==0){
-		anno_=dt->tm_year+1900;
+		anno_=dtt->tm_year+1900;
 	}
 	validar();
 	
@@ -233,14 +235,21 @@ Fecha Fecha::operator-(int n)const{
 
 //Operador +=
 Fecha& Fecha::operator+=(int n){
+	setlocale(LC_ALL, "es_ES.UTF-8");
+	time_t tt=time(nullptr);
+	tm* conv2=localtime(&tt);
 	this->dia_+=n;
-	conv->tm_year=anno_-1900;
-	conv->tm_mon=mes_-1;
-	conv->tm_mday=dia_;
-	mktime(conv);
-	anno_=conv->tm_year+1900;
-	mes_=conv->tm_mon+1;
-	dia_=conv->tm_mday;
+	/*if(this->dia_<=0){
+		this->dia_ += 31;
+		--this->mes_;
+	}*/
+	conv2->tm_year=anno_-1900;
+	conv2->tm_mon=mes_-1;
+	conv2->tm_mday=dia_;
+	mktime(conv2);
+	anno_=conv2->tm_year+1900;
+	mes_=conv2->tm_mon+1;
+	dia_=conv2->tm_mday;
 	validar();
 	return *this;
 }
