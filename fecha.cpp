@@ -19,7 +19,7 @@ std::ostream& operator<<(std::ostream&on,const Fecha&fech){
 	conv->tm_mon=fech.mes()-1;
 	conv->tm_mday=fech.dia();
 	mktime(conv);
-	std::strftime (Fechaletra,80,"%A %d de %B de %Y" ,conv);
+	std::strftime (Fechaletra,800,"%A %d de %B de %Y" ,conv);
 	on<<Fechaletra;
 	return on;
 }
@@ -236,8 +236,10 @@ Fecha Fecha::operator-(int n)const{
 //Operador +=
 Fecha& Fecha::operator+=(int n){
 	setlocale(LC_ALL, "es_ES.UTF-8");
-	time_t tt=time(nullptr);
-	tm* conv2=localtime(&tt);
+	//time_t tt=time(nullptr);
+	tm auxFe={0};
+	tm* conv2 = &auxFe;
+	//=localtime(&tt);
 	this->dia_+=n;
 	/*if(this->dia_<=0){
 		this->dia_ += 31;
